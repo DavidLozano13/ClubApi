@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="primaryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CLUB">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="presupuestoInicial" Type="int" />
+        </EntityType>
+        <EntityType Name="PERSONA">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="mail" Type="nvarchar(max)" Nullable="true" />
+          <Property Name="salario" Type="int" />
+          <Property Name="idClub" Type="uniqueidentifier" />
+          <Property Name="tipo" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PERSONA_CLUB">
+          <End Role="CLUB" Type="Self.CLUB" Multiplicity="0..1" />
+          <End Role="PERSONA" Type="Self.PERSONA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLUB">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PERSONA">
+              <PropertyRef Name="idClub" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="primaryModelStoreContainer">
+          <EntitySet Name="CLUB" EntityType="Self.CLUB" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PERSONA" EntityType="Self.PERSONA" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PERSONA_CLUB" Association="Self.FK_PERSONA_CLUB">
+            <End Role="CLUB" EntitySet="CLUB" />
+            <End Role="PERSONA" EntitySet="PERSONA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="primaryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CLUB">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="presupuestoInicial" Type="Int32" />
+          <NavigationProperty Name="PERSONA" Relationship="Self.FK_PERSONA_CLUB" FromRole="CLUB" ToRole="PERSONA" />
+        </EntityType>
+        <EntityType Name="PERSONA">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="mail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="true" />
+          <Property Name="salario" Type="Int32" />
+          <Property Name="idClub" Type="Guid" />
+          <Property Name="tipo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CLUB" Relationship="Self.FK_PERSONA_CLUB" FromRole="PERSONA" ToRole="CLUB" />
+        </EntityType>
+        <Association Name="FK_PERSONA_CLUB">
+          <End Role="CLUB" Type="Self.CLUB" Multiplicity="0..1" />
+          <End Role="PERSONA" Type="Self.PERSONA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLUB">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PERSONA">
+              <PropertyRef Name="idClub" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CLUB" EntityType="Self.CLUB" />
+          <EntitySet Name="PERSONA" EntityType="Self.PERSONA" />
+          <AssociationSet Name="FK_PERSONA_CLUB" Association="Self.FK_PERSONA_CLUB">
+            <End Role="CLUB" EntitySet="CLUB" />
+            <End Role="PERSONA" EntitySet="PERSONA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="primaryModelStoreContainer" CdmEntityContainer="entities">
+          <EntitySetMapping Name="CLUB">
+            <EntityTypeMapping TypeName="primaryModel.CLUB">
+              <MappingFragment StoreEntitySet="CLUB">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="presupuestoInicial" ColumnName="presupuestoInicial" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PERSONA">
+            <EntityTypeMapping TypeName="primaryModel.PERSONA">
+              <MappingFragment StoreEntitySet="PERSONA">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="salario" ColumnName="salario" />
+                <ScalarProperty Name="idClub" ColumnName="idClub" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
